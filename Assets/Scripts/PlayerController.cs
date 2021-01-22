@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -15,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Camera viewCam;
     public GameObject bulletImpact;
     public int currentAmmo;
+    public Animator gunAnim;
 
     // As soon as the game starts, we set the instance for all PlayerController script
     // to be the same for all
@@ -62,6 +61,10 @@ public class PlayerController : MonoBehaviour
                 {
                     //Debug.Log("I'm looking at " + hit.transform.name);
                     Instantiate(bulletImpact, hit.point, transform.rotation);
+                    if (hit.transform.tag == "Enemy")
+                    {
+                        hit.transform.parent.GetComponent<EnemyController>().TakeDamage();
+                    }
                 }
 
                 else
@@ -70,6 +73,7 @@ public class PlayerController : MonoBehaviour
                 }
 
                 currentAmmo--;
+                gunAnim.SetTrigger("Shoot");
             }
 
             else
