@@ -10,6 +10,13 @@ public class EnemyController : MonoBehaviour
     public GameObject explosion;
     public float playerRange = 10f;
     public Rigidbody2D theRB;
+
+    public bool shouldShoot;
+    public float fireRate = 0.5f;
+    private float shotCounter;
+    public GameObject bullet;
+    public Transform firePoint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +33,16 @@ public class EnemyController : MonoBehaviour
             // Normalized will only take either x or y to multiply for the moveSpeed
             // this way the enemy won't be moving faster when is faraway and slow when it's close to us
             theRB.velocity = playerDirection.normalized * moveSpeed;
+
+            if (shouldShoot)
+            {
+                shotCounter -= Time.deltaTime;
+                if(shotCounter <= 0)
+                {
+                    Instantiate(bullet, firePoint.position, firePoint.rotation);
+                    shotCounter = fireRate;
+                }
+            }
         }
         else
         {
