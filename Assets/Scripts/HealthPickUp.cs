@@ -1,8 +1,11 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class AmmoPickUp : MonoBehaviour
+public class HealthPickUp : MonoBehaviour
 {
-    public int ammoAmmount = 25;
+    public int healthAmmount = 100;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,14 +17,12 @@ public class AmmoPickUp : MonoBehaviour
     {
         
     }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Check if object colliding has the tag "Player"
-        if(other.tag == "Player")
+        if (other.tag == "Player")
         {
-            PlayerController.instance.currentAmmo += ammoAmmount;
-            PlayerController.instance.UpdateAmmoUI();
+            PlayerController.instance.AddHealth(healthAmmount);
             Destroy(gameObject);
         }
     }

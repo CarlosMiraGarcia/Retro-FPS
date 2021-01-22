@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,13 +18,19 @@ public class PlayerController : MonoBehaviour
 
     public GameObject bulletImpact;
     public int currentAmmo;
+
     public Animator gunAnim;
+    public Animator movingAnim;
+
 
     public int currentHealth;
     public int maxHealth = 100;
     public GameObject gameOverScreen;
 
     private bool hasDied;
+
+    public Text healthValue;
+    public Text ammoValue;
 
     // As soon as the game starts, we set the instance for all PlayerController script
     // to be the same for all
@@ -35,6 +42,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        healthValue.text = currentHealth.ToString() + "%";
+        ammoValue.text = currentAmmo.ToString();
     }
 
     // Update is called once per frame
@@ -86,6 +95,7 @@ public class PlayerController : MonoBehaviour
 
                     currentAmmo--;
                     gunAnim.SetTrigger("Shoot");
+                    UpdateAmmoUI();
                 }
 
                 else
@@ -99,6 +109,15 @@ public class PlayerController : MonoBehaviour
             gameOverScreen.SetActive(true);
         }
 
+        if(moveInput != Vector2.zero)
+        {
+            movingAnim.SetBool("isMoving", true);
+        }
+        else
+        {
+            movingAnim.SetBool("isMoving", false);
+        }
+
     }
 
     public void TakeDamage(int damageValue)
@@ -109,7 +128,10 @@ public class PlayerController : MonoBehaviour
         {
             gameOverScreen.SetActive(true);
             hasDied = true;
+            currentHealth = 0;
         }
+
+        healthValue.text = currentHealth.ToString() + "%";
     }
 
     public void AddHealth(int healAmmount)
@@ -123,5 +145,12 @@ public class PlayerController : MonoBehaviour
         {
             currentHealth += healAmmount;
         }
+
+        healthValue.text = currentHealth.ToString() + "%";
+    }
+
+    public void UpdateAmmoUI()
+    {
+        ammoValue.text = currentAmmo.ToString();
     }
 }
